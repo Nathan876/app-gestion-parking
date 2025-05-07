@@ -1,0 +1,228 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #F5F5F5;
+    color: #333333;
+}
+
+.navbar {
+    background-color: #2196F3;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar a {
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    text-align: center;
+}
+
+.navbar a:hover {
+    background-color: #1976D2;
+}
+
+.navbar-logo {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.navbar-links {
+    display: flex;
+    gap: 10px;
+}
+
+main {
+    padding: 20px;
+    background-color: white;
+    margin: 20px auto;
+    max-width: 1200px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #2196F3;
+    border-bottom: 2px solid #2196F3;
+    padding-bottom: 5px;
+}
+
+h3 {
+    color: #4CAF50;
+    margin-top: 20px;
+}
+
+form {
+    margin-top: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input:not([type="checkbox"]), select, button {
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #1976D2;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #f4f4f4;
+}
+
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #333333;
+    color: white;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+
+.stats-card, .quick-access a, .report-section, .settings-section {
+    margin-bottom: 20px;
+}
+
+.stats-card, .quick-access a {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.quick-access a {
+    background-color: #F5F5F5;
+    display: block;
+    text-decoration: none;
+    color: #333333;
+}
+
+.quick-access a:hover {
+    background-color: #e0e0e0;
+}
+
+.action-buttons button {
+    margin-right: 5px;
+}
+
+.settings-form {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.settings-form label, .settings-form input, .settings-form select {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.is-admin {
+    display: flex;
+    justify-content: inline-flex;
+    align-items: center;
+    width: 100%;
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .navbar-links {
+        flex-direction: column;
+        width: 100%;
+        gap: 5px;
+    }
+
+    main {
+        margin: 10px;
+        padding: 15px;
+    }
+
+    .quick-access {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .settings-form {
+        flex-direction: column;
+    }
+
+    .stats-card, .quick-access a {
+        padding: 15px;
+        font-size: 0.95em;
+    }
+
+    table, th, td {
+        font-size: 0.9em;
+    }
+
+    h2, h3 {
+        font-size: 1.2em;
+    }
+
+    button {
+        font-size: 1em;
+    }
+
+    footer {
+        position: static;
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar-logo {
+        font-size: 1.2em;
+    }
+
+    .navbar a {
+        padding: 8px 10px;
+        font-size: 0.95em;
+    }
+
+    input, select, button {
+        font-size: 0.95em;
+        padding: 8px;
+    }
+
+    th, td {
+        padding: 8px;
+    }
+}
