@@ -8,6 +8,7 @@
 
 </head>
 <body>
+<?php include 'navbar.php'; ?>
 <main>
     <div>
         <h2>Gestion des Places de Parking</h2>

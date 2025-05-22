@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
+<?php include 'navbar.php'; ?>
 <main>
     <div>
         <h2>Tableau de bord Administrateur</h2>

@@ -8,6 +8,7 @@
 
 </head>
 <body>
+<?php include 'navbar.php'; ?>
 <main>
     <div>
         <h2>Paramètres Système</h2>

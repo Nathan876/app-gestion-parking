@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
+<?php include 'navbar.php'; ?>
 <main>
   <div>
     <h2>Réserver une place de parking</h2>

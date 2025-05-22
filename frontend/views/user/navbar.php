@@ -15,9 +15,9 @@
     <a href="dashboard.php">Tableau de bord</a>
     <a href="booking.php">Réserver</a>
     <a href="booking-history.php">Réservations</a>
-    <a href="profile.html">Profil</a>
-    <a href="notifications.html">Notifications</a>
-    <a href="#">Déconnexion</a>
+    <a href="profile.php">Profil</a>
+    <a href="notifications.php">Notifications</a>
+    <a href="/app-gestion-parking/backend/index.php/logout">Déconnexion</a>
   </div>
 </nav>
 </body>

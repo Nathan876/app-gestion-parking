@@ -8,6 +8,7 @@
 
 </head>
 <body>
+<?php include 'navbar.php'; ?>
 <main>
     <div>
         <h2>Gestion des Tarifs</h2>

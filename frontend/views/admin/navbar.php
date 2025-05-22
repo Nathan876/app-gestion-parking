@@ -10,16 +10,16 @@
 <body>
 <nav class="navbar">
     <div class="navbar-logo">
-        <a href="index.html">Trouve ta place</a>
+        <a href="dashboard.php">Trouve ta place</a>
     </div>
     <div class="navbar-links">
-        <a href="dashboard.html">Tableau de bord</a>
-        <a href="bookings.html">Réservations</a>
-        <a href="parkings.html">Parkings</a>
-        <a href="pricing.html">Tarifs</a>
-        <a href="reports.html">Résultats</a>
-        <a href="settings.html">Utilisateurs</a>
-        <a href="logout.php">Déconnexion</a>
+        <a href="dashboard.php">Tableau de bord</a>
+        <a href="bookings.php">Réservations</a>
+        <a href="parkings.php">Parkings</a>
+        <a href="pricing.php">Tarifs</a>
+        <a href="reports.php">Résultats</a>
+        <a href="settings.php">Utilisateurs</a>
+        <a href="/app-gestion-parking/backend/index.php/logout">Déconnexion</a>
     </div>
 </nav>
 </body>
