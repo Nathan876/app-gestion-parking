@@ -45,29 +45,36 @@ class Router {
     }
 
     protected function run() {
-        (bool) $is404 = true;
-        (string) $url = parse_url($this->url, PHP_URL_PATH);
+        ob_clean();
+        $url = str_replace('/app-gestion-parking/backend/index.php/', '', parse_url($this->url, PHP_URL_PATH));
+        $method = strtolower($_SERVER['REQUEST_METHOD']);
 
-        foreach ($this->routes as $route => $controller) {
+        foreach ($this->routes as $route => $controllerClass) {
             if ($this->matchRule($url, $route)) {
-                (array) $params = $this->extractParams($url, $route);
-                new $controller($params);
+                $params = $this->extractParams($url, $route);
+                $controller = new $controllerClass($params);
 
-                $is404 = false;
+                $component = explode('/', trim($url, '/'))[0] ?? 'index';
+                $methodName = $method . ucfirst($component);
 
-                break;
+                if (method_exists($controller, $methodName)) {
+                    $result = $controller->$methodName();
+
+                    if ($result !== null) {
+                        header('Content-Type: application/json');
+                        echo json_encode($result);
+                    }
+
+                    return;
+                }
+
+                http_response_code(404);
+                echo json_encode(['code' => '404', 'message' => "Méthode $methodName non trouvée"]);
+                return;
             }
         }
 
-        if ($is404) {
-            header('Access-Control-Allow-Origin: *');
-            header('Content-type: application/json; charset=utf-8');
-            header('HTTP/1.0 404 Not Found');
-
-            echo json_encode([
-                'code' => '404',
-                'message' => 'Not Found'
-            ]);
-        }
+        http_response_code(404);
+        echo json_encode(['code' => '404', 'message' => 'Not Found']);
     }
 }

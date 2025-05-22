@@ -23,6 +23,9 @@
             <label for="password">Mot de passe :</label>
             <input type="password" id="password" name="password" required>
 
+            <label for="password_confirmation">Mot de passe :</label>
+            <input type="password" id="password_confirmation" name="password_confirmation" required>
+
             <label for="birth_date">Date de naissance :</label>
             <input type="date" id="birth_date" name="birth_date">
 
@@ -32,12 +35,7 @@
             <label for="license_plate">Plaque d'immatriculation :</label>
             <input type="text" id="license_plate" name="license_plate">
 
-            <label class="is-admin">
-                Vous êtes gérant de parking
-                <input type="checkbox" name="isadmin" />
-            </label>
-
-            <button type="submit">S'inscrire</button>
+            <button type="submit" name="signup-submit">S'inscrire</button>
         </form>
     </div>
 </main>

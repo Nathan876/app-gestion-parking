@@ -9,12 +9,12 @@
 <body>
 <nav class="navbar">
   <div class="navbar-logo">
-    <a href="index.html">Trouve ta place</a>
+    <a href="dashboard.php">Trouve ta place</a>
   </div>
   <div class="navbar-links">
-    <a href="dashboard.html">Tableau de bord</a>
-    <a href="booking.html">Réserver</a>
-    <a href="booking-history.html">Réservations</a>
+    <a href="dashboard.php">Tableau de bord</a>
+    <a href="booking.php">Réserver</a>
+    <a href="booking-history.php">Réservations</a>
     <a href="profile.html">Profil</a>
     <a href="notifications.html">Notifications</a>
     <a href="#">Déconnexion</a>

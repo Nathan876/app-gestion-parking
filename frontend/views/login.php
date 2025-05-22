@@ -10,8 +10,8 @@
 <main class="login-container">
     <section class="login-box">
         <h1 class="login-title">Connexion</h1>
-
-        <form action="" method="POST" class="login-form">
+<!--        action="/app-gestion-parking/backend/index.php/login" method="POST"-->
+        <form  class="login-form" id="login-form" action="/app-gestion-parking/backend/index.php/login" method="POST">
             <div class="form-group">
                 <label for="email">Adresse e-mail</label>
                 <input type="email" id="email" name="email" required autocomplete="email" />
@@ -30,12 +30,12 @@
                 <a href="#" class="forgot-link">Mot de passe oublié ?</a>
             </div>
 
-            <button type="submit" class="btn-login">Se connecter</button>
+            <button type="submit" name="submit" class="btn-login">Se connecter</button>
         </form>
 
         <p class="register-link">
             Pas encore de compte ?
-            <a href="register.html">Créer un compte</a>
+            <a href="register.php">Créer un compte</a>
         </p>
     </section>
 </main>

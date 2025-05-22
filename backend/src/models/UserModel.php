@@ -34,4 +34,22 @@ class UserModel extends SqlConnect {
 
         return $req->rowCount() > 0 ? $req->fetch(PDO::FETCH_ASSOC) : new stdClass();
     }
+
+    public function create(array $data): ?int
+    {
+        $stmt = $this->db->prepare("
+        INSERT INTO users (first_name, last_name, email, password, birth_date, phone_number, license_plate)
+        VALUES (:first_name, :last_name, :email, :password, :birth_date, :phone_number, :license_plate)
+    ");
+
+        $stmt->execute($data);
+
+        return $this->pdo->lastInsertId();
+    }
+
+    public function getByEmail(string $email) {
+        $req = $this->db->prepare("SELECT * FROM users WHERE email = :email");
+        $req->execute(['email' => $email]);
+        return $req->rowCount() > 0 ? $req->fetch(PDO::FETCH_ASSOC) : null;
+    }
 }

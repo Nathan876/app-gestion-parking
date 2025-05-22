@@ -27,7 +27,7 @@
         <p>Un email de confirmation vous a été envoyé à l'adresse Email de l'utilisateur.</p>
         <p>Merci d'avoir utilisé notre service de gestion de parking !</p>
 
-        <a href="./dashboard.html">Retourner au Tableau de Bord</a>
+        <a href="dashboard.php">Retourner au Tableau de Bord</a>
     </div>
 </main>
 </body>

@@ -15,7 +15,6 @@ class Controller {
         $this->body = (array) json_decode(file_get_contents('php://input'));
 
         $this->header();
-        $this->ifMethodExist();
     }
 
     protected function getCallerClassName() {
