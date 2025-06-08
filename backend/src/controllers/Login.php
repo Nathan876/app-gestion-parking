@@ -14,6 +14,8 @@ class Login extends Controller {
 
     public function postLogin()
     {
+        header('Content-Type: application/json');
+        session_start();
 
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
@@ -22,29 +24,26 @@ class Login extends Controller {
 
         if (!$user) {
             http_response_code(401);
-            return ['error' => 'Email introuvable'];
+            echo json_encode(['errors' => ['Email introuvable']]);
         }
 
         if (!password_verify($password, $user['password'])) {
             http_response_code(401);
-            return ['error' => 'Mot de passe incorrect'];
+            echo json_encode(['errors' => ['Mot de passe incorrect']]);
         }
 
         $_SESSION['user'] = [
-            'message' => 'Connexion réussie',
-            'user' => [
-                'id' => $user['id'],
-                'email' => $user['email'],
-                'first_name' => $user['first_name'],
-                'last_name' => $user['last_name']
-            ]
+            'id' => $user['id'],
+            'email' => $user['email'],
+            'first_name' => $user['first_name'],
+            'last_name' => $user['last_name'],
+            'role' => $user['role']
         ];
-        if($user['role'] === 0){
-            header('Location: ../../frontend/views/admin/dashboard.php');
-        } else if ($user['role'] === 1){
-            header('Location: ../../frontend/views/user/dashboard.php');
-        }
+
+        echo json_encode([
+            'authentication' => true,
+            'role' => $user['role']
+        ]);
         http_response_code(200);
-        exit;
     }
 }
