@@ -71,4 +71,43 @@
 </main>
 
 </body>
+<script type="module">
+    import { requireAuth } from '../../public/auth.js';
+    requireAuth(0);
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        fetch('http://127.0.0.1:81/bookings')
+            .then(res => res.json())
+            .then(data => {
+                const tbody = document.getElementById('bookingsTableBody');
+                tbody.innerHTML = '';
+                data.forEach(booking => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+          <td>${booking.id}</td>
+          <td>${booking.first_name} ${booking.last_name}</td>
+          <td>${booking.parking_name}</td>
+          <td>${booking.space_number}</td>
+          <td>${booking.arrival_date}</td>
+          <td>${booking.arrival_time}</td>
+          <td>${booking.departure_date}</td>
+          <td>${booking.departure_time}</td>
+          <td>${booking.status}</td>
+          <td>${booking.amount}</td>
+          <td class="action-buttons">
+            <button onclick="editBooking(${booking.id})">Modifier</button>
+            <button onclick="deletePlace(${booking.id})">Supprimer</button>
+          </td>
+        `;
+                    tbody.appendChild(tr);
+                });
+            });
+    });
+
+
+    function typeToText(type) {
+        return ['Standard', 'Handicapé', 'Moto', 'Vélo'][type] ?? 'Inconnu';
+    }
+</script>
 </html>

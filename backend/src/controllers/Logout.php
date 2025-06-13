@@ -8,7 +8,7 @@ class Logout extends Controller
     {
         session_destroy();
 
-        header('Location: /app-gestion-parking/frontend/views/login.php');
+        header('Location: https://trouvetaplace.local/views/login.php');
         exit;
     }
 }

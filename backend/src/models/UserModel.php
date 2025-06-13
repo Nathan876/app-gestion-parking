@@ -21,7 +21,7 @@ class UserModel extends SqlConnect {
         $req->execute(["id" => $id]);
     }
 
-    public function get(int $id) {
+    public function getById(int $id) {
         $req = $this->db->prepare("SELECT * FROM users WHERE id = :id");
         $req->execute(["id" => $id]);
 
@@ -44,12 +44,18 @@ class UserModel extends SqlConnect {
 
         $stmt->execute($data);
 
-        return $this->pdo->lastInsertId();
+        return $this->db->lastInsertId();
     }
 
     public function getByEmail(string $email) {
         $req = $this->db->prepare("SELECT * FROM users WHERE email = :email");
         $req->execute(['email' => $email]);
         return $req->rowCount() > 0 ? $req->fetch(PDO::FETCH_ASSOC) : null;
+    }
+
+    public function getAll(): array {
+        $req = $this->db->prepare("SELECT * FROM users ORDER BY id ASC");
+        $req->execute();
+        return $req->fetchAll(PDO::FETCH_ASSOC);
     }
 }

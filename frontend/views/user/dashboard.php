@@ -11,7 +11,6 @@
 <main>
   <div>
     <h2>Bienvenue, Nom de l'utilisateur</h2>
-
     <div>
       <h3>Vos Réservations</h3>
       <div id="upcoming_reservations">
@@ -61,4 +60,92 @@
   </div>
 </main>
 </body>
+<script type="module">
+    import { requireAuth } from '../../public/auth.js';
+    requireAuth(1);
+</script>
+<script>
+    const beamsClient = new PusherPushNotifications.Client({
+        instanceId: '8b16b2b6-56f2-4951-a346-421c0a38f58d',
+    });
+
+    beamsClient.start()
+        .then(() => beamsClient.addDeviceInterest('Bonjour'))
+        .then(() => console.log('Successfully registered and subscribed!'))
+        .catch(console.error);
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const upcomingReservations = document.getElementById('upcoming_reservations');
+        const pastReservations = document.getElementById('past_reservations');
+
+        try {
+            const response = await fetch('http://127.0.0.1:81/app-gestion-parking/backend/index.php/reservations', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                credentials: 'include'
+            });
+
+
+            if (!response.ok) {
+                throw new Error('Erreur lors de la récupération des réservations');
+            }
+
+            const reservations = await response.json();
+
+            const now = new Date();
+            const upcoming = reservations.filter(r => new Date(`${r.departure_date} ${r.departure_time}`) > now);
+            const past = reservations.filter(r => new Date(`${r.departure_date} ${r.departure_time}`) <= now);
+
+            upcomingReservations.innerHTML = `
+            <h4>Réservations à venir</h4>
+            <ul>
+                ${upcoming.slice(0, 3).map(res => `
+                    <li>
+                        <strong>Place :</strong> ${res.space_number}
+                        <strong>Date :</strong> ${formatDate(res.arrival_date)}
+                        <strong>Heure :</strong> ${formatTime(res.arrival_time)} - ${formatTime(res.departure_time)}
+                        <button onclick="cancelReservation(${res.id})">Annuler</button>
+                    </li>
+                `).join('')}
+            </ul>
+        `;
+
+            pastReservations.innerHTML = `
+            <h4>Réservations passées</h4>
+            <ul>
+                ${past.slice(0, 3).map(res => `
+                    <li>
+                        <strong>Place :</strong> ${res.space_number}
+                        <strong>Date :</strong> ${formatDate(res.arrival_date)}
+                        <strong>Heure :</strong> ${formatTime(res.arrival_time)} - ${formatTime(res.departure_time)}
+                    </li>
+                `).join('')}
+            </ul>
+        `;
+
+        } catch (error) {
+            console.error('Erreur:', error);
+            upcomingReservations.innerHTML = '<div class="error">Impossible de charger les réservations</div>';
+            pastReservations.innerHTML = '';
+        }
+    });
+
+    function formatDate(dateStr) {
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return new Date(dateStr).toLocaleDateString('fr-FR', options);
+    }
+
+    function formatTime(timeStr) {
+        return timeStr.slice(0, 5);
+    }
+
+    function cancelReservation(id) {
+        console.log(`Cancellation requested for reservation ${id}`);
+    }
+</script>
 </html>

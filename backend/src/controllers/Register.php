@@ -3,6 +3,10 @@
 namespace App\controllers;
 
 use App\models\UserModel;
+header("Access-Control-Allow-Origin: https://api.trouvetaplace.local");
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, X-Requested-With");
 
 class Register extends Controller {
     protected UserModel $user;
@@ -14,27 +18,32 @@ class Register extends Controller {
 
     public function postRegister()
     {
-        $first_name = $_POST['first_name'] ?? '';
-        $last_name = $_POST['last_name'] ?? '';
-        $email = $_POST['email'] ?? '';
-        $password = $_POST['password'] ?? '';
-        $password_confirmation = $_POST['password_confirmation'] ?? '';
-        $birth_date = $_POST['birth_date'] ?? null;
-        $phone_number = $_POST['phone_number'] ?? null;
-        $license_plate = $_POST['license_plate'] ?? null;
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        $first_name = $data['first_name'] ?? '';
+        $last_name = $data['last_name'] ?? '';
+        $email = $data['email'] ?? '';
+        $password = $data['password'] ?? '';
+        $password_confirmation = $data['password_confirmation'] ?? '';
+        $birth_date = $data['birth_date'] ?? null;
+        $phone_number = $data['phone_number'] ?? null;
+        $license_plate = $data['license_plate'] ?? null;
 
         if (!$first_name || !$last_name || !$email || !$password || !$password_confirmation) {
-            header('Location: /frontend/views/register.php?error=missing_fields');
+            http_response_code(400);
+            echo json_encode(['error' => 'missing_fields']);
             exit;
         }
 
         if ($password !== $password_confirmation) {
-            header('Location: /frontend/views/register.php?error=password_mismatch');
+            http_response_code(400);
+            echo json_encode(['error' => 'password_mismatch']);
             exit;
         }
 
         if ($this->user->getByEmail($email)) {
-            header('Location: /frontend/views/register.php?error=email_taken');
+            http_response_code(409);
+            echo json_encode(['error' => 'email_taken']);
             exit;
         }
 
@@ -50,7 +59,8 @@ class Register extends Controller {
         ]);
 
         if (!$newUserId) {
-            header('Location: /frontend/views/register.php?error=failed');
+            http_response_code(500);
+            echo json_encode(['error' => 'user_creation_failed']);
             exit;
         }
         $user = $this->user->getById($newUserId);
@@ -62,7 +72,8 @@ class Register extends Controller {
             'last_name' => $user['last_name']
         ];
 
-        header('Location: /frontend/views/user/dashboard.php');
+        http_response_code(200);
+        echo json_encode(['success' => true]);
         exit;
     }
 }

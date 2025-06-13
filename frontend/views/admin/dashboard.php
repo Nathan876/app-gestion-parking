@@ -34,4 +34,8 @@
     </div>
 </main>
 </body>
+<script type="module">
+    import { requireAuth } from '../../public/auth.js';
+    requireAuth(0);
+</script>
 </html>

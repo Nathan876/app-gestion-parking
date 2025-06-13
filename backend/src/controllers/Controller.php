@@ -1,5 +1,4 @@
 <?php
-
 namespace App\controllers;
 
 class Controller {
@@ -9,47 +8,55 @@ class Controller {
     protected string $className;
 
     public function __construct($params) {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+        if ($origin && preg_match('/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/', $origin)) {
+            header("Access-Control-Allow-Origin: https://trouvetaplace.local");
+            header("Access-Control-Allow-Credentials: true");
+            header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+            header("Access-Control-Allow-Headers: Content-Type, X-Requested-With");
+        } else {
+            // Facultatif : refuser l'accès ou définir une origine par défaut
+            header("Access-Control-Allow-Origin: https://trouvetaplace.local"); // à adapter selon le cas
+            header("Access-Control-Allow-Credentials: true");
+            header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+            header("Access-Control-Allow-Headers: Content-Type, X-Requested-With");
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+            http_response_code(200);
+            exit();
+        }
+
         $this->className = $this->getCallerClassName();
         $this->params = $params;
         $this->reqMethod = strtolower($_SERVER['REQUEST_METHOD']);
         $this->body = (array) json_decode(file_get_contents('php://input'));
-
-        $this->header();
+//        $this->ifMethodExist();
     }
-
     protected function getCallerClassName() {
         $backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2);
-
         if (isset($backtrace[1]['object'])) {
             $fullClassName = get_class($backtrace[1]['object']);
-            $className = basename(str_replace('\\', '/', $fullClassName));
-
-            return $className;
+            return basename(str_replace('\\', '/', $fullClassName));
         }
-
         return 'Unknown';
     }
 
-    protected function header() {
-        header('Access-Control-Allow-Origin: *');
-        header('Content-type: application/json; charset=utf-8');
-    }
-
     protected function ifMethodExist() {
-        $method = $this->reqMethod.''.$this->className;
-
+        $method = $this->reqMethod . $this->className;
         if (method_exists($this, $method)) {
             echo json_encode($this->$method());
-
             return;
         }
 
-        header('HTTP/1.0 404 Not Found');
+        http_response_code(404);
         echo json_encode([
             'code' => '404',
             'message' => 'Not Found'
         ]);
-
-        return;
     }
 }

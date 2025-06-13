@@ -11,7 +11,8 @@
 <main>
   <div>
     <h2>Réserver une place de parking</h2>
-    <form action="" method="post">
+<!--      action="http://localhost:81/reservation" method="post"-->
+    <form id="reservationForm">
       <label for="parking_id">Choisissez le parking :</label>
       <select id="parking_id" name="parking_id" required>
         <option value="">Sélectionnez un parking</option>
@@ -45,4 +46,83 @@
   </div>
 </main>
 </body>
+<script type="module">
+    import { requireAuth } from '../../public/auth.js';
+    requireAuth(1);
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const parkingSelect = document.getElementById('parking_id');
+
+        try {
+            const response = await fetch('http://127.0.0.1:81/app-gestion-parking/backend/index.php/parkings', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            const parkings = await response.json();
+
+            parkingSelect.innerHTML = '<option value="">Sélectionnez un parking</option>';
+
+            parkings.forEach(parking => {
+                const option = document.createElement('option');
+                option.value = parking.id;
+                option.textContent = parking.name;
+                parkingSelect.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Erreur lors de la récupération des parkings:', error);
+            parkingSelect.innerHTML = '<option value="">Erreur de chargement</option>';
+        }
+    });
+    document.querySelector('#reservationForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const form = e.target;
+
+        const userId = 2;
+
+        const startDateTime = `${form.arrival_date.value} ${form.arrival_time.value}:00`;
+        const endDateTime = `${form.departure_date.value} ${form.departure_time.value}:00`;
+
+        try {
+            const response = await fetch('http://127.0.0.1:81/app-gestion-parking/backend/index.php/reservation', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    user_id: 2,
+                    parking_id: parseInt(form.parking_id.value),
+                    space_type: parseInt(form.space_type.value),
+                    arrival_date: form.arrival_date.value,
+                    arrival_time: form.arrival_time.value,
+                    departure_date: form.departure_date.value,
+                    departure_time: form.departure_time.value,
+
+                    parking_space_id: null,
+                    amount: 0,
+                    status: 'pending'
+                })
+            });
+            const result = await response.json();
+
+            if (response.ok) {
+                window.location.href = `http://127.0.0.1/views/user/paypal.php`;
+                console.log(result);
+            } else {
+                alert('Erreur lors de la réservation : ' + (result.error || response.statusText));
+            }
+        } catch (err) {
+            console.log(err)
+            console.error(err);
+            alert('Une erreur est survenue.');
+        }
+    });
+</script>
 </html>

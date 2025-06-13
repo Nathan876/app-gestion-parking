@@ -19,8 +19,15 @@
         <a href="pricing.php">Tarifs</a>
         <a href="reports.php">Résultats</a>
         <a href="settings.php">Utilisateurs</a>
-        <a href="/app-gestion-parking/backend/index.php/logout">Déconnexion</a>
+        <a onclick="handleLogout()">Déconnexion</a>
     </div>
 </nav>
 </body>
+<script type="module">
+    import { logout } from '../../public/js/logout.js';
+
+    window.handleLogout = () => {
+        logout();
+    };
+</script>
 </html>

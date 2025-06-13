@@ -29,4 +29,8 @@
   </div>
 </main>
 </body>
+<script>
+    import { requireAuth } from '../../public/auth.js';
+    requireAuth(1);
+</script>
 </html>

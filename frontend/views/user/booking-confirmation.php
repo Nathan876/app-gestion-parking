@@ -13,23 +13,73 @@
         <h2>Confirmation de Réservation</h2>
         <p>Votre réservation a été effectuée avec succès !</p>
 
-        <div>
+        <div id="reservation-details">
             <h3>Détails de la Réservation</h3>
-            <p><strong>Parking :</strong> Nom du Parking</p>
-            <p><strong>Type de Place :</strong> Type de Place</p>
-            <p><strong>Numéro de Place :</strong> Numéro de Place</p>
-            <p><strong>Date d'Arrivée :</strong> Date d'Arrivée</p>
-            <p><strong>Heure d'Arrivée :</strong> Heure d'Arrivée</p>
-            <p><strong>Date de Départ :</strong> Date de Départ</p>
-            <p><strong>Heure de Départ :</strong> Heure de Départ</p>
-            <p><strong>Montant :</strong> Montant €</p>
+            <p id="parking"><strong>Parking :</strong> <span></span></p>
+            <p id="space-type"><strong>Type de Place :</strong> <span></span></p>
+            <p id="space-number"><strong>Numéro de Place :</strong> <span></span></p>
+            <p id="arrival-date"><strong>Date d'Arrivée :</strong> <span></span></p>
+            <p id="arrival-time"><strong>Heure d'Arrivée :</strong> <span></span></p>
+            <p id="departure-date"><strong>Date de Départ :</strong> <span></span></p>
+            <p id="departure-time"><strong>Heure de Départ :</strong> <span></span></p>
+            <p id="amount"><strong>Montant :</strong> <span></span></p>
         </div>
 
-        <p>Un email de confirmation vous a été envoyé à l'adresse Email de l'utilisateur.</p>
+        <p>Un email de confirmation vous a été envoyé.</p>
         <p>Merci d'avoir utilisé notre service de gestion de parking !</p>
 
-        <a href="dashboard.php">Retourner au Tableau de Bord</a>
+        <a href="dashboard.php" class="button">Retourner au Tableau de Bord</a>
     </div>
 </main>
+
+<script type="module">
+    import { requireAuth } from '../../public/auth.js';
+    requireAuth(1);
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            const response = await fetch('http://127.0.0.1:81/app-gestion-parking/backend/index.php/lastreservation', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                credentials: 'include'
+            });
+
+            if (!response.ok) {
+                throw new Error('Erreur lors de la récupération des données');
+            }
+
+            const data = await response.json();
+
+            document.querySelector('#parking span').textContent = data.parking_name;
+            document.querySelector('#space-type span').textContent = getTypeLabel(data.space_type);
+            document.querySelector('#space-number span').textContent = data.space_number;
+            document.querySelector('#arrival-date span').textContent = data.arrival_date;
+            document.querySelector('#arrival-time span').textContent = data.arrival_time;
+            document.querySelector('#departure-date span').textContent = data.departure_date;
+            document.querySelector('#departure-time span').textContent = data.departure_time;
+            document.querySelector('#amount span').textContent = `${data.amount} €`;
+
+        } catch (error) {
+            console.error('Erreur:', error);
+            document.getElementById('reservation-details').innerHTML = `
+                <div class="error">Impossible de charger les détails de la réservation</div>
+            `;
+        }
+    });
+
+    function getTypeLabel(type) {
+        const types = {
+            0: 'Standard',
+            1: 'Handicapé',
+            2: 'Moto',
+            3: 'Vélo'
+        };
+        return types[parseInt(type)] || 'Inconnu';
+    }
+</script>
 </body>
 </html>

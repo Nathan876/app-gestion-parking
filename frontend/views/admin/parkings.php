@@ -34,7 +34,7 @@
                 <option value="3">Vélo</option>
             </select>
 
-            <button type="button" onclick="">Ajouter</button>
+            <button type="button" onclick="addParking()">Ajouter</button>
         </form>
 
         <h3>Liste des Places de Parking</h3>
@@ -66,4 +66,84 @@
     </div>
 </main>
 </body>
+<script>
+    async function addParking() {
+        const formData = new FormData(document.getElementById('addParkingForm'));
+
+        const response = await fetch('http://127.0.0.1:81/app-gestion-parking/backend/index.php/parking', {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+        console.log(result);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        fetch('http://127.0.0.1:81/app-gestion-parking/backend/index.php/parking')
+            .then(res => res.json())
+            .then(data => {
+                const tbody = document.getElementById('parkingTableBody');
+                tbody.innerHTML = '';
+                data.forEach(place => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+          <td>${place.id}</td>
+          <td>${place.parking_name}</td>
+          <td>${place.space_number}</td>
+          <td>${typeToText(place.space_type)}</td>
+          <td>${place.status ?? 'Libre'}</td>
+          <td class="action-buttons">
+            <button onclick="deletePlace(${place.id})">Supprimer</button>
+          </td>
+        `;
+                    tbody.appendChild(tr);
+                });
+            });
+    });
+
+    document.getElementById('addParkingForm').addEventListener('submit', e => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+
+        fetch('/add', {
+            method: 'POST',
+            body: formData
+        })
+            .then(res => res.json())
+            .then(() => location.reload());
+    });
+
+    async function deletePlace(id) {
+        if (!id) {
+            console.error('ID manquant pour la suppression.');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('id', id);
+
+        try {
+            const response = await fetch('http://127.0.0.1:81/app-gestion-parking/backend/index.php/parking/delete', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error('Erreur lors de la suppression');
+            }
+
+            const data = await response.json();
+            console.log('Place supprimée:', data);
+            location.reload();
+        } catch (error) {
+            console.error('Erreur :', error);
+            alert('La suppression a échoué.');
+        }
+    }
+
+    function typeToText(type) {
+        return ['Standard', 'Handicapé', 'Moto', 'Vélo'][type] ?? 'Inconnu';
+    }
+</script>
 </html>

@@ -54,8 +54,11 @@ class Router {
                 $params = $this->extractParams($url, $route);
                 $controller = new $controllerClass($params);
 
-                $component = explode('/', trim($url, '/'))[0] ?? 'index';
-                $methodName = $method . ucfirst($component);
+                $parts = explode('/', trim($url, '/'));
+                $controllerName = $parts[0] ?? 'index';
+                $actionName = $parts[1] ?? '';
+                $methodName = strtolower($_SERVER['REQUEST_METHOD']) . ucfirst($actionName ?: $controllerName);
+                //$methodName = $method . ucfirst($component);
 
                 if (method_exists($controller, $methodName)) {
                     $result = $controller->$methodName();
