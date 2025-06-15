@@ -69,7 +69,7 @@
 </body>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        fetch('http://127.0.0.1:81/app-gestion-parking/backend/index.php/users')
+        fetch('https://api.trouvetaplace.local/users')
             .then(response => response.json())
             .then(users => {
                 const tbody = document.getElementById('userTableBody');
@@ -85,7 +85,7 @@
           <td>${user.phone_number || ''}</td>
           <td>${user.role == 1 ? 'Utilisateur' : 'Administrateur'}</td>
           <td class="action-buttons">
-            <form method="post" action="http://localhost:81/users/delete">
+            <form method="post" action="https://api.trouvetaplace.local/users/delete">
               <input type="hidden" name="user_id" value="${user.id}">
               <button type="submit">Supprimer</button>
             </form>
@@ -104,7 +104,7 @@
         const editForm = document.getElementById('editUserForm');
 
         function updateUsersList() {
-            fetch('http://127.0.0.1:81/app-gestion-parking/backend/index.php/users', {
+            fetch('https://api.trouvetaplace.local/users', {
                 credentials: 'include'
             })
                 .then(response => response.json())
@@ -123,7 +123,7 @@
                         <td>${user.role == 1 ? 'Utilisateur' : 'Administrateur'}</td>
                         <td class="action-buttons">
                             <button class="edit-btn" data-user='${JSON.stringify(user)}'>Modifier</button>
-                            <form method="post" action="http://localhost:81/users/delete">
+                            <form method="post" action="https://api.trouvetaplace.local/users/delete">
                                 <input type="hidden" name="user_id" value="${user.id}">
                                 <button type="submit">Supprimer</button>
                             </form>
@@ -162,7 +162,7 @@
             const userData = Object.fromEntries(formData.entries());
 
             try {
-                const response = await fetch(`http://127.0.0.1:81/app-gestion-parking/backend/index.php/user/${userData.id}`, {
+                const response = await fetch(`https://api.trouvetaplace.local/user/${userData.id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',

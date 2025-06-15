@@ -80,7 +80,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        fetch('http://127.0.0.1:81/app-gestion-parking/backend/index.php/parking')
+        fetch('https://api.trouvetaplace.local/parking')
             .then(res => res.json())
             .then(data => {
                 const tbody = document.getElementById('parkingTableBody');
@@ -124,7 +124,7 @@
         formData.append('id', id);
 
         try {
-            const response = await fetch('http://127.0.0.1:81/app-gestion-parking/backend/index.php/parking/delete', {
+            const response = await fetch('https://api.trouvetaplace.local/parking/delete', {
                 method: 'POST',
                 body: formData
             });

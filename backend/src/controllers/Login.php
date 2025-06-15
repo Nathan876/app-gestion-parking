@@ -3,12 +3,14 @@
 namespace App\controllers;
 
 use App\models\UserModel;
+use App\Services\NotificationService;
 
 class Login extends Controller {
     protected UserModel $user;
 
     public function __construct($params) {
         $this->user = new UserModel();
+        $this->notification = new NotificationService();
         parent::__construct($params);
     }
 
@@ -44,6 +46,7 @@ class Login extends Controller {
             'authentication' => true,
             'role' => $user['role']
         ]);
+        $this->notification->send_notification_new_match("bonjour", "test");
         http_response_code(200);
     }
 }

@@ -29,7 +29,7 @@
   </div>
 </main>
 </body>
-<script>
+<script type="module">
     import { requireAuth } from '../../public/auth.js';
     requireAuth(1);
 </script>

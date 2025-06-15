@@ -55,7 +55,7 @@
         const parkingSelect = document.getElementById('parking_id');
 
         try {
-            const response = await fetch('http://127.0.0.1:81/app-gestion-parking/backend/index.php/parkings', {
+            const response = await fetch('https://api.trouvetaplace.local/parkings', {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json'
@@ -88,7 +88,7 @@
         const endDateTime = `${form.departure_date.value} ${form.departure_time.value}:00`;
 
         try {
-            const response = await fetch('http://127.0.0.1:81/app-gestion-parking/backend/index.php/reservation', {
+            const response = await fetch('https://api.trouvetaplace.local/reservation', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -113,7 +113,7 @@
             const result = await response.json();
 
             if (response.ok) {
-                window.location.href = `http://127.0.0.1/views/user/paypal.php`;
+                window.location.href = `https://trouvetaplace.local/views/user/paypal.php`;
                 console.log(result);
             } else {
                 alert('Erreur lors de la réservation : ' + (result.error || response.statusText));

@@ -77,7 +77,7 @@
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        fetch('http://127.0.0.1:81/bookings')
+        fetch('https://api.trouvetaplace.local/bookings')
             .then(res => res.json())
             .then(data => {
                 const tbody = document.getElementById('bookingsTableBody');
