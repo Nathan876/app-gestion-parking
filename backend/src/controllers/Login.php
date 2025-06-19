@@ -7,7 +7,7 @@ use App\Services\NotificationService;
 
 class Login extends Controller {
     protected UserModel $user;
-
+    private NotificationService $notification;
     public function __construct($params) {
         $this->user = new UserModel();
         $this->notification = new NotificationService();
@@ -41,6 +41,12 @@ class Login extends Controller {
             'last_name' => $user['last_name'],
             'role' => $user['role']
         ];
+
+        $this->notification->send_notification(
+            $user['id'],
+            'Bienvenue !',
+            "Bonjour {$user['first_name']}, vous êtes maintenant connecté."
+        );
 
         echo json_encode([
             'authentication' => true,

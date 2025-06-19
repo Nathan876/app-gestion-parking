@@ -34,17 +34,18 @@
 
 <script type="module">
     import { requireAuth } from '../../public/auth.js';
-    requireAuth(1);
+    const authentification = requireAuth(1);
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', async () => {
         try {
-            const response = await fetch('http://127.0.0.1:81/app-gestion-parking/backend/index.php/lastreservation', {
+            const response = await fetch('https://api.trouvetaplace.local/lastreservation', {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest'
                 },
+                body: JSON.stringify({id: authentification.id})
                 credentials: 'include'
             });
 

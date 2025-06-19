@@ -19,8 +19,7 @@ class Controller {
             header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
             header("Access-Control-Allow-Headers: Content-Type, X-Requested-With");
         } else {
-            // Facultatif : refuser l'accès ou définir une origine par défaut
-            header("Access-Control-Allow-Origin: https://trouvetaplace.local"); // à adapter selon le cas
+            header("Access-Control-Allow-Origin: https://trouvetaplace.local");
             header("Access-Control-Allow-Credentials: true");
             header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
             header("Access-Control-Allow-Headers: Content-Type, X-Requested-With");

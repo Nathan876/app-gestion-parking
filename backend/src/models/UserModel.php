@@ -16,9 +16,59 @@ class UserModel extends SqlConnect {
         $req->execute($data);
     }
 
-    public function delete(int $id) {
-        $req = $this->db->prepare("DELETE FROM users WHERE id = :id");
-        $req->execute(["id" => $id]);
+    public function update($data) {
+        $sql = "UPDATE users 
+            SET first_name = :first_name,
+                last_name = :last_name,
+                email = :email,
+                birth_date = :birth_date,
+                phone_number = :phone_number,
+                license_plate = :license_plate,
+                role = :role
+            WHERE id = :id";
+
+        if (!empty($data['password'])) {
+            $sql = "UPDATE users 
+                SET first_name = :first_name,
+                    last_name = :last_name,
+                    email = :email,
+                    birth_date = :birth_date,
+                    phone_number = :phone_number,
+                    license_plate = :license_plate,
+                    password = :password
+                WHERE id = :id";
+        }
+
+        $stmt = $this->db->prepare($sql);
+
+        // Required fields
+        $stmt->bindParam(':first_name', $data['first_name'], PDO::PARAM_STR);
+        $stmt->bindParam(':last_name', $data['last_name'], PDO::PARAM_STR);
+        $stmt->bindParam(':email', $data['email'], PDO::PARAM_STR);
+        $stmt->bindParam(':birth_date', $data['birth_date'], PDO::PARAM_STR);
+        $stmt->bindParam(':phone_number', $data['phone_number'], PDO::PARAM_STR);
+        $stmt->bindParam(':license_plate', $data['license_plate'], PDO::PARAM_STR);
+        $stmt->bindParam(':id', $_SESSION['user']['id'], PDO::PARAM_INT);
+
+        // Optional password update
+        if (!empty($data['password'])) {
+            $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
+            $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
+        }
+
+        return $stmt->execute();
+    }
+
+//    public function delete(int $id) {
+//        $req = $this->db->prepare("DELETE FROM users WHERE id = :id");
+//        $req->execute(["id" => $id]);
+//    }
+
+    public function delete($id) {
+        $sql = "DELETE FROM users WHERE id = :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        return $stmt->execute();
     }
 
     public function getById(int $id) {
@@ -38,8 +88,8 @@ class UserModel extends SqlConnect {
     public function create(array $data): ?int
     {
         $stmt = $this->db->prepare("
-        INSERT INTO users (first_name, last_name, email, password, birth_date, phone_number, license_plate)
-        VALUES (:first_name, :last_name, :email, :password, :birth_date, :phone_number, :license_plate)
+        INSERT INTO users (first_name, last_name, email, password, birth_date, role, phone_number, license_plate)
+        VALUES (:first_name, :last_name, :email, :password, :birth_date, 1, :phone_number, :license_plate)
     ");
 
         $stmt->execute($data);
@@ -57,5 +107,16 @@ class UserModel extends SqlConnect {
         $req = $this->db->prepare("SELECT * FROM users ORDER BY id ASC");
         $req->execute();
         return $req->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function get($userId) {
+        $sql = "SELECT id, first_name, last_name, email, birth_date, phone_number, license_plate 
+            FROM users 
+            WHERE id = :id";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }

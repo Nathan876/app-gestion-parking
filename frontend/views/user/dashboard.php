@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tableau de bord utilisateur - Gestion de Parking</title>
   <link rel="stylesheet" href="../styles.css">
+    <script src="https://js.pusher.com/beams/2.1.0/push-notifications-cdn.js"></script>
 </head>
 <body>
 <?php include 'navbar.php'; ?>
@@ -35,29 +36,6 @@
         </ul>
       </div>
     </div>
-
-    <div>
-      <h3>Vos Informations</h3>
-      <form action="" method="post">
-        <label for="first_name">Prénom :</label>
-        <input type="text" id="first_name" name="first_name" value="[Prénom]" required>
-
-        <label for="last_name">Nom :</label>
-        <input type="text" id="last_name" name="last_name" value="[Nom]" required>
-
-        <label for="email">Email :</label>
-        <input type="email" id="email" name="email" value="[Email]" required>
-
-        <label for="phone_number">Numéro de téléphone :</label>
-        <input type="tel" id="phone_number" name="phone_number" value="[Téléphone]">
-
-        <label for="license_plate">Plaque d'immatriculation :</label>
-        <input type="text" id="license_plate" name="license_plate" value="[Plaque]">
-
-        <button type="submit">Mettre à jour</button>
-      </form>
-    </div>
-  </div>
 </main>
 </body>
 <script type="module">
@@ -72,81 +50,80 @@
 
     beamsClient.start()
         .then(() => beamsClient.addDeviceInterest('Bonjour'))
-        .then(() => console.log('Successfully registered and subscribed!'))
         .catch(console.error);
 </script>
 
-<!--<script>-->
-<!--    document.addEventListener('DOMContentLoaded', async () => {-->
-<!--        const upcomingReservations = document.getElementById('upcoming_reservations');-->
-<!--        const pastReservationsà = document.getElementById('past_reservations');-->
-<!---->
-<!--        try {-->
-<!--            const response = await fetch('https://api.trouvetaplace.local/reservations', {-->
-<!--                method: 'GET',-->
-<!--                headers: {-->
-<!--                    'Accept': 'application/json',-->
-<!--                    'X-Requested-With': 'XMLHttpRequest'-->
-<!--                },-->
-<!--                credentials: 'include'-->
-<!--            });-->
-<!---->
-<!---->
-<!--            if (!response.ok) {-->
-<!--                throw new Error('Erreur lors de la récupération des réservations');-->
-<!--            }-->
-<!---->
-<!--            const reservations = await response.json();-->
-<!---->
-<!--            const now = new Date();-->
-<!--            const upcoming = reservations.filter(r => new Date(`${r.departure_date} ${r.departure_time}`) > now);-->
-<!--            const past = reservations.filter(r => new Date(`${r.departure_date} ${r.departure_time}`) <= now);-->
-<!---->
-<!--            upcomingReservations.innerHTML = `-->
-<!--            <h4>Réservations à venir</h4>-->
-<!--            <ul>-->
-<!--                ${upcoming.slice(0, 3).map(res => `-->
-<!--                    <li>-->
-<!--                        <strong>Place :</strong> ${res.space_number}-->
-<!--                        <strong>Date :</strong> ${formatDate(res.arrival_date)}-->
-<!--                        <strong>Heure :</strong> ${formatTime(res.arrival_time)} - ${formatTime(res.departure_time)}-->
-<!--                        <button onclick="cancelReservation(${res.id})">Annuler</button>-->
-<!--                    </li>-->
-<!--                `).join('')}-->
-<!--            </ul>-->
-<!--        `;-->
-<!---->
-<!--            pastReservations.innerHTML = `-->
-<!--            <h4>Réservations passées</h4>-->
-<!--            <ul>-->
-<!--                ${past.slice(0, 3).map(res => `-->
-<!--                    <li>-->
-<!--                        <strong>Place :</strong> ${res.space_number}-->
-<!--                        <strong>Date :</strong> ${formatDate(res.arrival_date)}-->
-<!--                        <strong>Heure :</strong> ${formatTime(res.arrival_time)} - ${formatTime(res.departure_time)}-->
-<!--                    </li>-->
-<!--                `).join('')}-->
-<!--            </ul>-->
-<!--        `;-->
-<!---->
-<!--        } catch (error) {-->
-<!--            console.error('Erreur:', error);-->
-<!--            upcomingReservations.innerHTML = '<div class="error">Impossible de charger les réservations</div>';-->
-<!--            pastReservations.innerHTML = '';-->
-<!--        }-->
-<!--    });-->
-<!---->
-<!--    function formatDate(dateStr) {-->
-<!--        const options = { year: 'numeric', month: 'long', day: 'numeric' };-->
-<!--        return new Date(dateStr).toLocaleDateString('fr-FR', options);-->
-<!--    }-->
-<!---->
-<!--    function formatTime(timeStr) {-->
-<!--        return timeStr.slice(0, 5);-->
-<!--    }-->
-<!---->
-<!--    function cancelReservation(id) {-->
-<!--        console.log(`Cancellation requested for reservation ${id}`);-->
-<!--    }-->
-<!--</script>-->
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const upcomingReservations = document.getElementById('upcoming_reservations');
+        const pastReservations = document.getElementById('past_reservations');
+
+        try {
+            const response = await fetch('https://api.trouvetaplace.local/reservations', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                credentials: 'include'
+            });
+
+
+            if (!response.ok) {
+                throw new Error('Erreur lors de la récupération des réservations');
+            }
+
+            const reservations = await response.json();
+
+            const now = new Date();
+            const upcoming = reservations.filter(r => new Date(`${r.departure_date} ${r.departure_time}`) > now);
+            const past = reservations.filter(r => new Date(`${r.departure_date} ${r.departure_time}`) <= now);
+
+            upcomingReservations.innerHTML = `
+            <h4>Réservations à venir</h4>
+            <ul>
+                ${upcoming.slice(0, 3).map(res => `
+                    <li>
+                        <strong>Place :</strong> ${res.space_number}
+                        <strong>Date :</strong> ${formatDate(res.arrival_date)}
+                        <strong>Heure :</strong> ${formatTime(res.arrival_time)} - ${formatTime(res.departure_time)}
+                        <button onclick="cancelReservation(${res.id})">Annuler</button>
+                    </li>
+                `).join('')}
+            </ul>
+        `;
+
+            pastReservations.innerHTML = `
+            <h4>Réservations passées</h4>
+            <ul>
+                ${past.slice(0, 3).map(res => `
+                    <li>
+                        <strong>Place :</strong> ${res.space_number}
+                        <strong>Date :</strong> ${formatDate(res.arrival_date)}
+                        <strong>Heure :</strong> ${formatTime(res.arrival_time)} - ${formatTime(res.departure_time)}
+                    </li>
+                `).join('')}
+            </ul>
+        `;
+
+        } catch (error) {
+            console.error('Erreur:', error);
+            upcomingReservations.innerHTML = '<div class="error">Impossible de charger les réservations</div>';
+            pastReservations.innerHTML = '';
+        }
+    });
+
+    function formatDate(dateStr) {
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return new Date(dateStr).toLocaleDateString('fr-FR', options);
+    }
+
+    function formatTime(timeStr) {
+        return timeStr.slice(0, 5);
+    }
+
+    function cancelReservation(id) {
+        console.log(`Cancellation requested for reservation ${id}`);
+    }
+</script>
 </html>

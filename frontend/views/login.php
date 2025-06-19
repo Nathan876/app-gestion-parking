@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Connexion - Gestion de Parking</title>
     <link rel="stylesheet" href="styles.css" />
+    <script src="https://js.pusher.com/beams/2.1.0/push-notifications-cdn.js"></script>
 </head>
 <body>
 <main class="login-container">
@@ -21,7 +22,9 @@
                 <label for="password">Mot de passe</label>
                 <input type="password" id="password" name="password" required autocomplete="current-password">
             </div>
-
+            <div class="form-group">
+                <a href="https://trouvetaplace.local/views/register.php">Créer un compte</a>
+            </div>
             <button type="submit" class="btn-login">Se connecter</button>
         </form>
     </section>
@@ -38,14 +41,20 @@
         const errorsElement = document.querySelector('#errors');
         errorsElement.innerHTML = '';
 
+        const permission = await Notification.requestPermission();
+        if (permission !== 'granted') {
+            errorsElement.innerHTML = `<div class="alert alert-danger">Notifications refusées</div>`;
+            return;
+        }
+
         try {
             const result = await login(email, password);
-
+            console.log(result.success)
             if (result.success) {
-                if (result.role === 0) {
-                    window.location.href = '/views/admin/dashboard.php';
+                if (result.user.role === 0) {
+                    window.location.href = 'https://trouvetaplace.local/views/admin/dashboard.php';
                 } else {
-                    window.location.href = '/views/user/dashboard.php';
+                    window.location.href = 'https://trouvetaplace.local/views/user/dashboard.php';
                 }
             } else {
                 errorsElement.innerHTML = `<div class="alert alert-danger">${result.message}</div>`;

@@ -65,14 +65,9 @@
             const result = await register(first_name, last_name, email, password, password_confirmation, birth_date, phone_number, license_plate);
 
             if (result.success) {
-                if (result.role === 0) {
-                    window.location.href = '/views/admin/dashboard.php';
-                } else {
-                    window.location.href = 'https://trouvetaplace.local/views/user/dashboard.php';
-                }
-            } else {
-                errorsElement.innerHTML = `<div class="alert alert-danger">${result.message}</div>`;
+                window.location.href = 'https://trouvetaplace.local/views/login.php';
             }
+
         } catch (err) {
             errorsElement.innerHTML = `<div class="alert alert-danger">Erreur de connexion au serveur</div>`;
         }

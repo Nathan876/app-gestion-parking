@@ -8,17 +8,20 @@
 </head>
 <body>
 <nav class="navbar">
-  <div class="navbar-logo">
-    <a href="dashboard.php">Trouve ta place</a>
-  </div>
-  <div class="navbar-links">
-    <a href="dashboard.php">Tableau de bord</a>
-    <a href="booking.php">Réserver</a>
-    <a href="booking-history.php">Réservations</a>
-    <a href="profile.php">Profil</a>
-    <a href="notifications.php">Notifications</a>
-    <a onclick="handleLogout()">Déconnexion</a>
-  </div>
+    <div class="navbar-logo">
+        <a href="dashboard.php">Trouve ta place</a>
+    </div>
+    <button class="navbar-toggle" aria-label="Menu">
+        <span class="hamburger"></span>
+    </button>
+    <div class="navbar-links">
+        <a href="dashboard.php">Tableau de bord</a>
+        <a href="booking.php">Réserver</a>
+        <a href="booking-history.php">Réservations</a>
+        <a href="profile.php">Profil</a>
+        <a href="notifications.php">Notifications</a>
+        <a onclick="handleLogout()">Déconnexion</a>
+    </div>
 </nav>
 </body>
 <script type="module">

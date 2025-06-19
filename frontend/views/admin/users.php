@@ -19,27 +19,16 @@
                 <th>Prénom</th>
                 <th>Email</th>
                 <th>Téléphone</th>
+                <th>Plaque d'immatriculation</th>
                 <th>Statut</th>
+                <th>Rôle</th>
                 <th>Actions</th>
             </tr>
             </thead>
-            <tbody id="userTableBody">
-            <tr>
-                <td>1</td>
-                <td>Dupont</td>
-                <td>Jean</td>
-                <td>jean.dupont@example.com</td>
-                <td>0123456789</td>
-                <td>Actif</td>
-                <td class="action-buttons">
-                    <button>Désactiver</button>
-                    <button>Supprimer</button>
-                </td>
-            </tr>
-            </tbody>
+            <tbody id="userTableBody"></tbody>
         </table>
     </div>
-    <div id="editModal" class="modal">
+    <div id="editModal" class="modal" style="display: none">
         <div class="modal-content">
             <span class="close">&times;</span>
             <h3>Modifier l'utilisateur</h3>
@@ -61,6 +50,19 @@
                     <label for="phone">Téléphone</label>
                     <input type="tel" id="phone" name="phone_number">
                 </div>
+                <div class="form-group">
+                    <label for="license_plate">Plaque d'immatriculation</label>
+                    <input type="text" id="license_plate" name="license_plate">
+                </div>
+
+                <div class="form-group">
+                    <label for="role">Rôle</label>
+                    <select id="role" name="role" required>
+                        <option value="0">Administrateur</option>
+                        <option value="1">Utilisateur</option>
+                    </select>
+                </div>
+
                 <button type="submit" class="btn-primary">Enregistrer</button>
             </form>
         </div>
@@ -69,50 +71,21 @@
 </body>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        fetch('https://api.trouvetaplace.local/users')
-            .then(response => response.json())
-            .then(users => {
-                const tbody = document.getElementById('userTableBody');
-                tbody.innerHTML = '';
-
-                users.forEach(user => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-          <td>${user.id}</td>
-          <td>${user.last_name}</td>
-          <td>${user.first_name}</td>
-          <td>${user.email}</td>
-          <td>${user.phone_number || ''}</td>
-          <td>${user.role == 1 ? 'Utilisateur' : 'Administrateur'}</td>
-          <td class="action-buttons">
-            <form method="post" action="https://api.trouvetaplace.local/users/delete">
-              <input type="hidden" name="user_id" value="${user.id}">
-              <button type="submit">Supprimer</button>
-            </form>
-          </td>
-        `;
-                    tbody.appendChild(tr);
-                });
-            })
-            .catch(error => {
-                console.error('Erreur lors du chargement des utilisateurs :', error);
-            });
-    });
-    document.addEventListener('DOMContentLoaded', () => {
         const modal = document.getElementById('editModal');
         const closeBtn = document.querySelector('.close');
         const editForm = document.getElementById('editUserForm');
 
         function updateUsersList() {
-            fetch('https://api.trouvetaplace.local/users', {
-                credentials: 'include'
-            })
+            fetch('https://api.trouvetaplace.local/users', { credentials: 'include' })
                 .then(response => response.json())
                 .then(users => {
                     const tbody = document.getElementById('userTableBody');
                     tbody.innerHTML = '';
 
                     users.forEach(user => {
+                        const roleText = user.role == 1 ? 'Utilisateur' : 'Administrateur';
+                        const statusText = user.status == 1 ? 'Activé' : 'Désactivé';
+
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
                         <td>${user.id}</td>
@@ -120,13 +93,12 @@
                         <td>${user.first_name}</td>
                         <td>${user.email}</td>
                         <td>${user.phone_number || ''}</td>
-                        <td>${user.role == 1 ? 'Utilisateur' : 'Administrateur'}</td>
+                        <td>${user.license_plate || ''}</td>
+                        <td>${statusText}</td>
+                        <td>${roleText}</td>
                         <td class="action-buttons">
                             <button class="edit-btn" data-user='${JSON.stringify(user)}'>Modifier</button>
-                            <form method="post" action="https://api.trouvetaplace.local/users/delete">
-                                <input type="hidden" name="user_id" value="${user.id}">
-                                <button type="submit">Supprimer</button>
-                            </form>
+                            <button class="delete-btn" data-user-id="${user.id}">Supprimer</button>
                         </td>
                     `;
                         tbody.appendChild(tr);
@@ -140,7 +112,19 @@
                             document.getElementById('firstName').value = user.first_name;
                             document.getElementById('email').value = user.email;
                             document.getElementById('phone').value = user.phone_number || '';
+                            document.getElementById('license_plate').value = user.license_plate || '';
+                            document.getElementById('role').value = parseInt(user.role);
+
                             modal.style.display = 'block';
+                        });
+                    });
+                    document.querySelectorAll('.delete-btn').forEach(button => {
+                        button.addEventListener('click', async () => {
+                            const userId = button.dataset.userId;
+                            const confirmed = confirm('Voulez-vous vraiment supprimer cet utilisateur ?');
+                            if (confirmed) {
+                                await deleteUser(userId);
+                            }
                         });
                     });
                 })
@@ -162,7 +146,7 @@
             const userData = Object.fromEntries(formData.entries());
 
             try {
-                const response = await fetch(`https://api.trouvetaplace.local/user/${userData.id}`, {
+                const response = await fetch(`https://api.trouvetaplace.local/user`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -185,6 +169,31 @@
         });
 
         updateUsersList();
+
     });
+    async function deleteUser(userId) {
+        try {
+            const response = await fetch(`https://api.trouvetaplace.local/user`, {
+                method: 'DELETE',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({ id: userId })
+            });
+
+            if (response.ok) {
+                alert('Utilisateur supprimé avec succès');
+                window.location.href = "https://trouvetaplace.local/views/admin/users.php";
+            } else {
+                const error = await response.json();
+                alert('Erreur : ' + (error.error || 'Suppression échouée'));
+            }
+        } catch (err) {
+            console.error('Erreur lors de la suppression :', err);
+            alert('Erreur lors de la suppression');
+        }
+    }
 </script>
 </html>

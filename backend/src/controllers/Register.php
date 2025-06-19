@@ -3,11 +3,14 @@
 namespace App\controllers;
 
 use App\models\UserModel;
-header("Access-Control-Allow-Origin: https://api.trouvetaplace.local");
-header("Access-Control-Allow-Credentials: true");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, X-Requested-With");
+header('Access-Control-Allow-Origin: https://trouvetaplace.local');
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, X-Requested-With');
+header('Access-Control-Allow-Credentials: true');
 
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    exit(0);
+}
 class Register extends Controller {
     protected UserModel $user;
 
@@ -65,12 +68,12 @@ class Register extends Controller {
         }
         $user = $this->user->getById($newUserId);
 
-        $_SESSION['user'] = [
-            'id' => $user['id'],
-            'email' => $user['email'],
-            'first_name' => $user['first_name'],
-            'last_name' => $user['last_name']
-        ];
+//        $_SESSION['user'] = [
+//            'id' => $user['id'],
+//            'email' => $user['email'],
+//            'first_name' => $user['first_name'],
+//            'last_name' => $user['last_name']
+//        ];
 
         http_response_code(200);
         echo json_encode(['success' => true]);

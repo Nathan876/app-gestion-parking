@@ -13,12 +13,12 @@
         <a href="dashboard.php">Trouve ta place</a>
     </div>
     <div class="navbar-links">
-        <a href="dashboard.php">Tableau de bord</a>
         <a href="bookings.php">Réservations</a>
         <a href="parkings.php">Parkings</a>
+        <a href="parking.php">Places</a>
         <a href="pricing.php">Tarifs</a>
         <a href="reports.php">Résultats</a>
-        <a href="settings.php">Utilisateurs</a>
+        <a href="users.php">Utilisateurs</a>
         <a onclick="handleLogout()">Déconnexion</a>
     </div>
 </nav>

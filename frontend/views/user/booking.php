@@ -11,13 +11,10 @@
 <main>
   <div>
     <h2>Réserver une place de parking</h2>
-<!--      action="http://localhost:81/reservation" method="post"-->
     <form id="reservationForm">
       <label for="parking_id">Choisissez le parking :</label>
       <select id="parking_id" name="parking_id" required>
         <option value="">Sélectionnez un parking</option>
-        <option value="1">Parking Centre-Ville</option>
-        <option value="2">Parking Gare</option>
       </select>
 
       <label for="space_type">Type de place :</label>
@@ -48,9 +45,8 @@
 </body>
 <script type="module">
     import { requireAuth } from '../../public/auth.js';
-    requireAuth(1);
-</script>
-<script>
+    const data =requireAuth(1);
+
     document.addEventListener('DOMContentLoaded', async () => {
         const parkingSelect = document.getElementById('parking_id');
 
@@ -81,8 +77,7 @@
         e.preventDefault();
 
         const form = e.target;
-
-        const userId = 2;
+        const userId = data.id;
 
         const startDateTime = `${form.arrival_date.value} ${form.arrival_time.value}:00`;
         const endDateTime = `${form.departure_date.value} ${form.departure_time.value}:00`;
@@ -97,7 +92,6 @@
                 },
                 credentials: 'include',
                 body: JSON.stringify({
-                    user_id: 2,
                     parking_id: parseInt(form.parking_id.value),
                     space_type: parseInt(form.space_type.value),
                     arrival_date: form.arrival_date.value,
