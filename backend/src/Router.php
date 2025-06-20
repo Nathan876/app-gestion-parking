@@ -58,7 +58,6 @@ class Router {
                 $controllerName = $parts[0] ?? 'index';
                 $actionName = $parts[1] ?? '';
                 $methodName = strtolower($_SERVER['REQUEST_METHOD']) . ucfirst($actionName ?: $controllerName);
-                //$methodName = $method . ucfirst($component);
 
                 if (method_exists($controller, $methodName)) {
                     $result = $controller->$methodName();
