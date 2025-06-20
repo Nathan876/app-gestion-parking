@@ -17,7 +17,18 @@ class UserModel extends SqlConnect {
     }
 
     public function update($data) {
-        $sql = "UPDATE users 
+        if (!empty($data['password'])) {
+            $sql = "UPDATE users
+            SET first_name = :first_name,
+                last_name = :last_name,
+                email = :email,
+                birth_date = :birth_date,
+                phone_number = :phone_number,
+                license_plate = :license_plate,
+                password = :password
+            WHERE id = :id";
+        } else {
+            $sql = "UPDATE users
             SET first_name = :first_name,
                 last_name = :last_name,
                 email = :email,
@@ -26,19 +37,7 @@ class UserModel extends SqlConnect {
                 license_plate = :license_plate,
                 role = :role
             WHERE id = :id";
-
-        if (!empty($data['password'])) {
-            $sql = "UPDATE users 
-                SET first_name = :first_name,
-                    last_name = :last_name,
-                    email = :email,
-                    birth_date = :birth_date,
-                    phone_number = :phone_number,
-                    license_plate = :license_plate,
-                    password = :password
-                WHERE id = :id";
         }
-
 
         $stmt = $this->db->prepare($sql);
 
@@ -48,14 +47,18 @@ class UserModel extends SqlConnect {
         $stmt->bindParam(':birth_date', $data['birth_date'], PDO::PARAM_STR);
         $stmt->bindParam(':phone_number', $data['phone_number'], PDO::PARAM_STR);
         $stmt->bindParam(':license_plate', $data['license_plate'], PDO::PARAM_STR);
+
         if ($_SESSION['user']['role'] === 0) {
             $stmt->bindParam(':id', $data['id'], PDO::PARAM_INT);
+            if (empty($data['password'])) {
+                $stmt->bindParam(':role', $data['role'], PDO::PARAM_INT);
+            }
         } else {
             $stmt->bindParam(':id', $_SESSION['user']['id'], PDO::PARAM_INT);
+            if (empty($data['password'])) {
+                $stmt->bindParam(':role', $_SESSION['user']['role'], PDO::PARAM_INT);
+            }
         }
-
-        $stmt->bindParam(':role', $data['role'], PDO::PARAM_INT);
-
 
         if (!empty($data['password'])) {
             $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);

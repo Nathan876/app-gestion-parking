@@ -176,6 +176,9 @@
 
                 if (response.ok) {
                     modal.style.display = 'none';
+                    document.body.classList.remove('modal-open');
+                    document.body.style.position = '';
+                    document.body.style.width = '';
                     updateUsersList();
                 } else {
                     alert('Erreur lors de la mise à jour');

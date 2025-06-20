@@ -5,40 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Historique des Réservations - Gestion de Parking</title>
     <link rel="stylesheet" href="../styles.css">
-    <style>
-        .reservations-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        .reservations-table th, .reservations-table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        .reservations-table th {
-            background-color: #f5f5f5;
-            font-weight: bold;
-        }
-        .reservations-table tr:hover {
-            background-color: #f9f9f9;
-        }
-        .btn-cancel {
-            padding: 6px 12px;
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .btn-cancel:hover {
-            background-color: #c82333;
-        }
-        .btn-cancel:disabled {
-            background-color: #6c757d;
-            cursor: not-allowed;
-        }
-    </style>
 </head>
 <body>
 <?php include 'navbar.php'; ?>
@@ -73,7 +39,7 @@
     import { requireAuth } from '../../public/auth.js';
     requireAuth(1);
 </script>
-
+<script src="https://js.pusher.com/beams/2.1.0/push-notifications-cdn.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', async () => {
         const bookingHistory = document.getElementById('bookingHistory');

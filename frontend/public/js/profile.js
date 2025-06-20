@@ -1,4 +1,4 @@
-export const profile = async (firstName, lastName, email, password, passwordConfirmation, phoneNumber, licensePlate) => {
+export const profile = async (firstName, lastName, email, password, passwordConfirmation, birthDate, phoneNumber, licensePlate) => {
     try {
         const response = await fetch('https://api.trouvetaplace.local/profile', {
             method: 'POST',
@@ -7,7 +7,7 @@ export const profile = async (firstName, lastName, email, password, passwordConf
                 'X-Requested-With': 'XMLHttpRequest'
             },
             credentials: 'include',
-            body: JSON.stringify({ firstName, lastName, email, password, passwordConfirmation, phoneNumber, licensePlate })
+            body: JSON.stringify({ firstName, lastName, email, password, passwordConfirmation, birthDate, phoneNumber, licensePlate })
         });
 
         const data = await response.json();

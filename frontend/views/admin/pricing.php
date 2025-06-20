@@ -81,6 +81,7 @@
                 <th>Heure de Début</th>
                 <th>Heure de Fin</th>
                 <th>Jour de la Semaine</th>
+                <th>Priorité</th>
                 <th>Tarif par Heure</th>
                 <th>Actions</th>
             </tr>
@@ -173,13 +174,14 @@ requireAuth(0);
             const row = document.createElement('tr');
             row.innerHTML = `
             <td>${price.id}</td>
-            <td>${price.parking_id}</td>
+            <td>${price.parking_name}</td>
             <td>${typeToText(price.space_type)}</td>
             <td>${price.start_date}</td>
             <td>${price.end_date}</td>
             <td>${price.start_time}</td>
             <td>${price.end_time}</td>
-            <td>${price.week_day}</td>
+            <td>${formatDay(price.week_day)}</td>
+            <td>${formatPriority(price.priority)}</td>
             <td>${price.price_per_hour} €</td>
             <td class="action-buttons">
                 <button onclick="openEditModal('${btoa(JSON.stringify(price))}')">Modifier</button>
@@ -263,7 +265,9 @@ requireAuth(0);
     }
 </script>
 <script>
-    document.addEventListener('DOMContentLoaded', async () => {const parkingSelect = document.getElementById('parking_id');
+    document.addEventListener('DOMContentLoaded', async () => {
+
+        const parkingSelect = document.getElementById('parking_id');
 
         try {
             const response = await fetch('https://api.trouvetaplace.local/parkings', {
@@ -310,10 +314,35 @@ requireAuth(0);
 
         const result = await response.json();
         if (result.success) {
-            alert("Tarif ajouté avec succès !");
             location.reload();
         } else {
             alert("Erreur : " + result.error);
+        }
+    }
+
+    function formatDay(day) {
+        const dayMapping = {
+            'monday': 'Lundi',
+            'tuesday': 'Mardi',
+            'wednesday': 'Mercredi',
+            'thursday': 'Jeudi',
+            'friday': 'Vendredi',
+            'saturday': 'Samedi',
+            'sunday': 'Dimanche',
+        };
+        return dayMapping[day.toLowerCase()] || day;
+    }
+
+    function formatPriority(priority) {
+        switch (parseInt(priority)) {
+            case 0:
+                return 'Faible';
+            case 5:
+                return 'Moyen';
+            case 10:
+                return 'Élevé';
+            default:
+                return priority;
         }
     }
 </script>

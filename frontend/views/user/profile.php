@@ -30,7 +30,7 @@
                 <label for="password_confirmation">Mot de passe :</label>
                 <input type="password" id="password_confirmation" name="password_confirmation">
 
-                <label for="birth_date">Mot de passe :</label>
+                <label for="birth_date">Date de naissance :</label>
                 <input type="date" id="birth_date" name="birth_date" required>
 
                 <label for="phone_number">Numéro de téléphone :</label>
@@ -51,7 +51,7 @@
     import { requireAuth } from '../../public/auth.js';
     requireAuth(1);
 </script>
-
+<script src="https://js.pusher.com/beams/2.1.0/push-notifications-cdn.js"></script>
 <script type="module">
     document.addEventListener('DOMContentLoaded', async () => {
         try {
@@ -65,7 +65,7 @@
             document.getElementById('first_name').value = user.first_name;
             document.getElementById('last_name').value = user.last_name;
             document.getElementById('email').value = user.email;
-            document.getElementById('birth_date').value = user.birth_date ? new Date(user.birth_date).toISOString().split('T')[0] : '';
+            document.getElementById('birth_date').value = user.birth_date;
             document.getElementById('phone_number').value = user.phone_number ?? '';
             document.getElementById('license_plate').value = user.license_plate ?? '';
         } catch (error) {
@@ -84,7 +84,7 @@
             password_confirmation: document.getElementById("password_confirmation").value,
             birth_date: document.getElementById('birth_date').value,
             phone_number: document.getElementById('phone_number').value,
-            license_plate: document.getElementById('license_plate').value
+            license_plate: document.getElementById('license_plate').value,
         };
 
         try {

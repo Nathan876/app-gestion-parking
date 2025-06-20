@@ -47,6 +47,8 @@ class Authentification extends Controller {
             'role' => $user['role']
         ];
 
+        $this->notification->send_notification("user_".$user['id'], "Bienvenue sur trouve ta place");
+
         return [
             'success' => true,
             'message' => 'Connexion réussie',

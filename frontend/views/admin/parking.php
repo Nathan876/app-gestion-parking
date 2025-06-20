@@ -46,19 +46,7 @@
                 <th>Actions</th>
             </tr>
             </thead>
-            <tbody id="parkingTableBody">
-            <tr>
-                <td>1</td>
-                <td>Parking Centre-Ville</td>
-                <td>A1</td>
-                <td>Standard</td>
-                <td>Libre</td>
-                <td class="action-buttons">
-                    <button onclick="">Modifier</button>
-                    <button onclick="">Supprimer</button>
-                </td>
-            </tr>
-            </tbody>
+            <tbody id="parkingTableBody"></tbody>
         </table>
     </div>
 </main>

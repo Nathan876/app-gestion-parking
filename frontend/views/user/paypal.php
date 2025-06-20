@@ -14,6 +14,7 @@
 
     <div class="stats-card">
         <div id="reservation-details"></div>
+
         <div id="paypal-button-container"></div>
     </div>
 </main>
@@ -26,7 +27,29 @@
 <script src="https://www.paypal.com/sdk/js?client-id=AZ5opfGgwwWZUmso6Apfvnqew9XZXawrJwajH86_VQw_ULc2P8DDHe8kQF9YHIPvA6-J4qfYP2JfwiIb&currency=EUR&locale=fr_FR"></script>
 
 <script>
-    import { getReservation } from '../../public/js/paypal.js';
+    async function getReservation() {
+        try {
+            const response = await fetch(`https://api.trouvetaplace.local/lastreservation`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                credentials: 'include'
+            });
+
+            if (!response.ok) {
+                throw new Error('Erreur lors de la récupération de la réservation');
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Erreur:', error);
+            throw error;
+        }
+    }
+
+
     document.addEventListener('DOMContentLoaded', async () => {
         try {
             const reservation = await getReservation();
@@ -74,7 +97,6 @@
                         })
                     });
                     const details = await response.json();
-
                     window.location.href = 'https://trouvetaplace.local/views/user/booking-confirmation.php';
                 }
             }).render('#paypal-button-container');

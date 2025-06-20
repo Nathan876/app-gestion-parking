@@ -43,6 +43,7 @@
   </div>
 </main>
 </body>
+<script src="https://js.pusher.com/beams/2.1.0/push-notifications-cdn.js"></script>
 <script type="module">
     import { requireAuth } from '../../public/auth.js';
     const data =requireAuth(1);

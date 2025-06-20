@@ -34,6 +34,7 @@
     import { requireAuth } from '../../public/auth.js';
     const authentification = requireAuth(1);
 </script>
+<script src="https://js.pusher.com/beams/2.1.0/push-notifications-cdn.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', async () => {
         try {

@@ -11,7 +11,7 @@
 <?php include 'navbar.php'; ?>
 <main>
   <div>
-    <h2>Bienvenue,</h2>
+    <h2>Bienvenue</h2>
     <div>
       <h3>Vos Réservations</h3>
       <div id="upcoming_reservations">
@@ -87,7 +87,6 @@
                         <strong>Place :</strong> ${res.space_number}
                         <strong>Date :</strong> ${formatDate(res.arrival_date)}
                         <strong>Heure :</strong> ${formatTime(res.arrival_time)} - ${formatTime(res.departure_time)}
-                        <button onclick="cancelReservation(${res.id})">Annuler</button>
                     </li>
                 `).join('')}
             </ul>
@@ -120,10 +119,6 @@
 
     function formatTime(timeStr) {
         return timeStr.slice(0, 5);
-    }
-
-    function cancelReservation(id) {
-        console.log(`Cancellation requested for reservation ${id}`);
     }
 </script>
 </html>

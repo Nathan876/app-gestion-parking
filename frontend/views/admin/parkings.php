@@ -179,8 +179,6 @@
                 const error = await response.json();
                 throw new Error(error.error || 'Erreur lors de la modification');
             }
-
-            alert('Parking modifié avec succès');
             location.reload();
         } catch (error) {
             alert(error.message);

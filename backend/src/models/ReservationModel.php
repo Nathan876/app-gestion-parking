@@ -114,7 +114,7 @@ ORDER BY reservations.created_at DESC");
 //        ]);
 //    }
 
-    public function getUserReservations($userId, $limit = 6) {
+    public function getUserReservations($userId, $limit) {
         $sql = "SELECT r.*, ps.space_number, ps.space_type, p.name as parking_name 
         FROM reservations r
         JOIN parking_spaces ps ON r.parking_space_id = ps.id

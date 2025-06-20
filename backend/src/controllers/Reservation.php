@@ -128,7 +128,7 @@ class Reservation extends Controller {
         }
 
         $userId = $_SESSION['user']['id'];
-        $reservations = $this->reservation->getUserReservations($userId);
+        $reservations = $this->reservation->getUserReservations($userId, 1000);
 
         echo json_encode($reservations ?: []);
     }
@@ -163,7 +163,7 @@ class Reservation extends Controller {
         }
 
         $userId = $_SESSION['user']['user']['id'];
-        $reservations = $this->reservation->getUserReservations($userId);
+        $reservations = $this->reservation->getUserReservations($userId, 1000);
 
         echo json_encode($reservations ?: []);
     }

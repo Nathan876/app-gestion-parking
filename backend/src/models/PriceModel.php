@@ -18,7 +18,12 @@ class PriceModel extends SqlConnect
 
     public function getAll(): array
     {
-        $sql = "SELECT * FROM prices ORDER BY priority DESC, start_date DESC";
+        $sql = "
+    SELECT prices.*, parkings.name AS parking_name
+    FROM prices
+    JOIN parkings ON prices.parking_id = parkings.id
+    ORDER BY prices.priority DESC, prices.start_date DESC
+";
         $stmt = $this->db->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

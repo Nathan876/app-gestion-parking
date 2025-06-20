@@ -164,6 +164,10 @@ footer {
     padding: 10px;
 }
 
+.hamburger:hover {
+    background: none;
+}
+
 .hamburger,
 .hamburger::before,
 .hamburger::after {
@@ -239,7 +243,6 @@ footer {
         font-size: 1em;
     }
 
-    /* Style uniforme pour toutes les modales */
     .modal {
         position: fixed;
         top: 0;
@@ -268,8 +271,6 @@ footer {
         margin: auto;
     }
 
-    /* Ajuster le JavaScript pour utiliser 'flex' au lieu de 'block' */
-
     .close {
         color: #aaa;
         float: right;
@@ -288,7 +289,6 @@ footer {
     }
 }
 
-/* Style uniforme pour toutes les modales */
 .modal {
     position: fixed;
     top: 0;
@@ -317,7 +317,7 @@ footer {
     margin: auto;
 }
 
-/* Ajuster le JavaScript pour utiliser 'flex' au lieu de 'block' */
+
 
 .close {
     float: right;

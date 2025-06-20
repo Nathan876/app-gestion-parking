@@ -82,6 +82,7 @@
         <th>Heure de Départ</th>
         <th>Statut</th>
         <th>Montant</th>
+          <th>Actions</th>
       </tr>
       </thead>
       <tbody id="bookingsTableBody"></tbody>
@@ -127,7 +128,7 @@
                 <td>${booking.arrival_time}</td>
                 <td>${booking.departure_date}</td>
                 <td>${booking.departure_time}</td>
-                <td>${booking.status}</td>
+                <td>${formatStatus(booking.status)}</td>
                 <td>${booking.amount} €</td>
                 <td>
                     <button onclick="openEditModal(${booking.id})">Modifier</button>
@@ -223,6 +224,16 @@
                 renderTable(bookings);
             })
             .catch(err => document.querySelector("errors").innerHTML(err.message));
+    }
+
+    function formatStatus(status) {
+        const statusMapping = {
+            'pending': 'En attente',
+            'confirmed': 'Confirmée',
+            'cancelled': 'Annulée',
+            'completed': 'Terminée'
+        };
+        return statusMapping[status.toLowerCase()] || status;
     }
 </script>
 </html>
