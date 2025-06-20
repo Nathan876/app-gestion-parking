@@ -48,7 +48,7 @@
 
         try {
             const result = await login(email, password);
-            console.log(result.success)
+
             if (result.success) {
                 if (result.user.role === 0) {
                     window.location.href = 'https://trouvetaplace.local/views/admin/dashboard.php';

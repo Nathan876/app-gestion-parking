@@ -32,7 +32,6 @@ export const login = async (email, password) => {
                 try {
                     await beamsClient.start();
                     await beamsClient.addDeviceInterest(userId);
-                    console.log('Notifications configurées pour :', userId);
                 } catch (notifErr) {
                     console.error('Erreur de configuration des notifications :', notifErr);
                 }

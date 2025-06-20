@@ -21,7 +21,6 @@ export async function requireAuth(requiredRole = null) {
                 return;
             }
 
-            console.log("Utilisateur connecté :", data);
             return data;
         })
         .catch(err => {

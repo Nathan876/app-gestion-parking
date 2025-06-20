@@ -109,12 +109,10 @@
 
             if (response.ok) {
                 window.location.href = `https://trouvetaplace.local/views/user/paypal.php`;
-                console.log(result);
             } else {
                 alert('Erreur lors de la réservation : ' + (result.error || response.statusText));
             }
         } catch (err) {
-            console.log(err)
             console.error(err);
             alert('Une erreur est survenue.');
         }
