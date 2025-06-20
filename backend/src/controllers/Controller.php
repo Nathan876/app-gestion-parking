@@ -34,7 +34,6 @@ class Controller {
         $this->params = $params;
         $this->reqMethod = strtolower($_SERVER['REQUEST_METHOD']);
         $this->body = (array) json_decode(file_get_contents('php://input'));
-//        $this->ifMethodExist();
     }
     protected function getCallerClassName() {
         $backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2);

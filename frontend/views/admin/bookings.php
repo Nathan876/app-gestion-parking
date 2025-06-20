@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="../styles.css">
 
 </head>
+<div class="errors"></div>
 <div id="editModal" class="modal" style="display:none;">
     <div class="modal-content">
         <span class="close-button" onclick="closeEditModal()">&times;</span>
@@ -139,7 +140,9 @@
 
     function openEditModal(id) {
         const booking = bookings.find(b => b.id === id);
-        if (!booking) return alert("Réservation introuvable");
+        if (!booking) {
+            document.querySelector("errors").innerHTML("Réservation introuvable");
+        }
 
         document.getElementById('edit_id').value = booking.id;
         document.getElementById('edit_arrival_date').value = booking.arrival_date;
@@ -149,6 +152,9 @@
         document.getElementById('edit_status').value = booking.status;
 
         modal.style.display = 'flex';
+        document.body.classList.add('modal-open');
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
     }
 
     form.addEventListener('submit', async (e) => {
@@ -174,30 +180,28 @@
         const result = await response.json();
 
         if (response.ok && result.success) {
-            alert('Réservation mise à jour');
             closeEditModal();
             updateRow(result.reservation);
         } else {
-            alert(result.error || 'Erreur lors de la mise à jour');
+            document.querySelector("errors").innerHTML(result.error || 'Erreur lors de la mise à jour');
         }
     });
 
     function updateRow(updated) {
         const row = [...tbody.rows].find(row => row.cells[0].textContent === updated.id.toString());
         if (!row) return;
-
         row.cells[4].textContent = updated.arrival_date;
         row.cells[5].textContent = updated.arrival_time;
         row.cells[6].textContent = updated.departure_date;
         row.cells[7].textContent = updated.departure_time;
         row.cells[8].textContent = updated.status;
-
-        row.style.backgroundColor = '#e0ffe0';
-        setTimeout(() => row.style.backgroundColor = '', 1500);
     }
 
     function closeEditModal() {
         modal.style.display = 'none';
+        document.body.classList.remove('modal-open');
+        document.body.style.position = '';
+        document.body.style.width = '';
     }
 
     function deletePlace(id) {
@@ -212,15 +216,13 @@
             body: JSON.stringify({ id: id })
         })
             .then(res => {
-                if (!res.ok) throw new Error("Erreur lors de la suppression");
-                return res.json();
+                document.querySelector("errors").innerHTML("Erreur lors de la suppression")
             })
             .then(() => {
-                alert('Réservation supprimée');
                 bookings = bookings.filter(b => b.id !== id);
                 renderTable(bookings);
             })
-            .catch(err => alert(err.message));
+            .catch(err => document.querySelector("errors").innerHTML(err.message));
     }
 </script>
 </html>

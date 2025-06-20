@@ -24,8 +24,6 @@
             <p id="departure-time"><strong>Heure de Départ :</strong> <span></span></p>
             <p id="amount"><strong>Montant :</strong> <span></span></p>
         </div>
-
-        <p>Un email de confirmation vous a été envoyé.</p>
         <p>Merci d'avoir utilisé notre service de gestion de parking !</p>
 
         <a href="dashboard.php" class="button">Retourner au Tableau de Bord</a>
@@ -45,7 +43,6 @@
                     'Accept': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest'
                 },
-                body: JSON.stringify({id: authentification.id})
                 credentials: 'include'
             });
 

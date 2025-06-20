@@ -27,7 +27,6 @@ class User extends Controller {
     }
 
     public function deleteUser() {
-        // Récupère les données JSON du corps de la requête
         $input = json_decode(file_get_contents("php://input"), true);
 
         if (!isset($input['id'])) {
@@ -125,4 +124,5 @@ class User extends Controller {
 
         return ['success' => true, 'message' => 'Utilisateur supprimé avec succès'];
     }
+
 }

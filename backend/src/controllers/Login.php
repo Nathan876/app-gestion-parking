@@ -45,14 +45,12 @@ class Login extends Controller {
         $this->notification->send_notification(
             $user['id'],
             'Bienvenue !',
-            "Bonjour {$user['first_name']}, vous êtes maintenant connecté."
         );
 
         echo json_encode([
             'authentication' => true,
             'role' => $user['role']
         ]);
-        $this->notification->send_notification_new_match("bonjour", "test");
         http_response_code(200);
     }
 }

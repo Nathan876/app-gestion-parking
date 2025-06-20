@@ -11,7 +11,7 @@
 <?php include 'navbar.php'; ?>
 <main>
   <div>
-    <h2>Bienvenue, Nom de l'utilisateur</h2>
+    <h2>Bienvenue,</h2>
     <div>
       <h3>Vos Réservations</h3>
       <div id="upcoming_reservations">

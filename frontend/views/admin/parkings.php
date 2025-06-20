@@ -125,7 +125,10 @@
         document.getElementById('edit_city').value = parking.city;
         document.getElementById('edit_postal_code').value = parking.postal_code;
 
-        document.getElementById('editModal').style.display = 'block';
+        document.getElementById('editModal').style.display = 'flex';
+        document.body.classList.add('modal-open');
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
     }
 
     async function updateParking(id) {
@@ -186,6 +189,9 @@
 
     document.querySelector('.close').addEventListener('click', () => {
         document.getElementById('editModal').style.display = 'none';
+        document.body.classList.remove('modal-open');
+        document.body.style.position = '';
+        document.body.style.width = '';
     });
 
     document.addEventListener('DOMContentLoaded', () => {

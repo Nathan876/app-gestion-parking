@@ -63,6 +63,13 @@
                     </select>
                 </div>
 
+                <div class="form-group">
+                    <label for="status">Status du compte</label>
+                    <select id="status" name="status" required>
+                        <option value="0">Désactif</option>
+                        <option value="1">Actif</option>
+                    </select>
+                </div>
                 <button type="submit" class="btn-primary">Enregistrer</button>
             </form>
         </div>
@@ -76,7 +83,9 @@
         const editForm = document.getElementById('editUserForm');
 
         function updateUsersList() {
-            fetch('https://api.trouvetaplace.local/users', { credentials: 'include' })
+            fetch('https://api.trouvetaplace.local/users', {
+                credentials: 'include'
+            })
                 .then(response => response.json())
                 .then(users => {
                     const tbody = document.getElementById('userTableBody');
@@ -94,7 +103,7 @@
                         <td>${user.email}</td>
                         <td>${user.phone_number || ''}</td>
                         <td>${user.license_plate || ''}</td>
-                        <td>${statusText}</td>
+                        <td>${user.status ? "Désactivé" : "Activé"}</td>
                         <td>${roleText}</td>
                         <td class="action-buttons">
                             <button class="edit-btn" data-user='${JSON.stringify(user)}'>Modifier</button>
@@ -114,8 +123,12 @@
                             document.getElementById('phone').value = user.phone_number || '';
                             document.getElementById('license_plate').value = user.license_plate || '';
                             document.getElementById('role').value = parseInt(user.role);
+                            document.getElementById('status').value = user.status ? '0' : '1';
 
-                            modal.style.display = 'block';
+                            modal.style.display = 'flex';
+                            document.body.classList.add('modal-open');
+                            document.body.style.position = 'fixed';
+                            document.body.style.width = '100%';
                         });
                     });
                     document.querySelectorAll('.delete-btn').forEach(button => {
@@ -133,7 +146,12 @@
                 });
         }
 
-        closeBtn.onclick = () => modal.style.display = 'none';
+        closeBtn.onclick = () => {
+            modal.style.display = 'none';
+            document.body.classList.remove('modal-open');
+            document.body.style.position = '';
+            document.body.style.width = '';
+        }
         window.onclick = (event) => {
             if (event.target === modal) {
                 modal.style.display = 'none';
@@ -192,7 +210,6 @@
             }
         } catch (err) {
             console.error('Erreur lors de la suppression :', err);
-            alert('Erreur lors de la suppression');
         }
     }
 </script>

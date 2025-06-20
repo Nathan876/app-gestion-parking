@@ -39,18 +39,24 @@ class UserModel extends SqlConnect {
                 WHERE id = :id";
         }
 
+
         $stmt = $this->db->prepare($sql);
 
-        // Required fields
         $stmt->bindParam(':first_name', $data['first_name'], PDO::PARAM_STR);
         $stmt->bindParam(':last_name', $data['last_name'], PDO::PARAM_STR);
         $stmt->bindParam(':email', $data['email'], PDO::PARAM_STR);
         $stmt->bindParam(':birth_date', $data['birth_date'], PDO::PARAM_STR);
         $stmt->bindParam(':phone_number', $data['phone_number'], PDO::PARAM_STR);
         $stmt->bindParam(':license_plate', $data['license_plate'], PDO::PARAM_STR);
-        $stmt->bindParam(':id', $_SESSION['user']['id'], PDO::PARAM_INT);
+        if ($_SESSION['user']['role'] === 0) {
+            $stmt->bindParam(':id', $data['id'], PDO::PARAM_INT);
+        } else {
+            $stmt->bindParam(':id', $_SESSION['user']['id'], PDO::PARAM_INT);
+        }
 
-        // Optional password update
+        $stmt->bindParam(':role', $data['role'], PDO::PARAM_INT);
+
+
         if (!empty($data['password'])) {
             $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
             $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
@@ -58,11 +64,6 @@ class UserModel extends SqlConnect {
 
         return $stmt->execute();
     }
-
-//    public function delete(int $id) {
-//        $req = $this->db->prepare("DELETE FROM users WHERE id = :id");
-//        $req->execute(["id" => $id]);
-//    }
 
     public function delete($id) {
         $sql = "DELETE FROM users WHERE id = :id";

@@ -8,18 +8,19 @@
 </head>
 <body>
 <nav class="navbar">
-    <div class="navbar-logo">
-        <a href="dashboard.php">Trouve ta place</a>
-    </div>
-    <button class="navbar-toggle" aria-label="Menu">
+    <button class="navbar-toggle" aria-label="Menu" onclick="toggleMenu()">
         <span class="hamburger"></span>
     </button>
+    <div class="navbar-logo">
+        <a href="dashboard.php">
+            <img src="../../public/images/logo.png" alt="Logo Trouve ta place" class="site-logo">
+        </a>
+    </div>
     <div class="navbar-links">
         <a href="dashboard.php">Tableau de bord</a>
         <a href="booking.php">Réserver</a>
         <a href="booking-history.php">Réservations</a>
         <a href="profile.php">Profil</a>
-        <a href="notifications.php">Notifications</a>
         <a onclick="handleLogout()">Déconnexion</a>
     </div>
 </nav>
@@ -30,5 +31,11 @@
     window.handleLogout = () => {
         logout();
     };
+</script>
+<script>
+    function toggleMenu() {
+        const links = document.querySelector('.navbar-links');
+        links.classList.toggle('show');
+    }
 </script>
 </html>

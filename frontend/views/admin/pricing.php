@@ -155,6 +155,11 @@ requireAuth(0);
         await loadPricing();
     });
 
+
+    function typeToText(type) {
+        return ['Standard', 'Handicapé', 'Moto', 'Vélo'][type] ?? 'Inconnu';
+    }
+
     async function loadPricing() {
         const tbody = document.getElementById('pricingTableBody');
         tbody.innerHTML = '';
@@ -167,30 +172,26 @@ requireAuth(0);
         prices.forEach(price => {
             const row = document.createElement('tr');
             row.innerHTML = `
-      <td>${price.id}</td>
-      <td>${price.parking_id}</td>
-      <td>${typeToText(price.space_type)}</td>
-      <td>${price.start_date}</td>
-      <td>${price.end_date}</td>
-      <td>${price.start_time}</td>
-      <td>${price.end_time}</td>
-      <td>${price.week_day}</td>
-      <td>${price.price_per_hour} €</td>
-      <td>
-        <button onclick="openEditModal(${encodeURIComponent(JSON.stringify(price))})">Modifier</button>
-        <button onclick="deletePricing(${price.id})">Supprimer</button>
-      </td>
-    `;
+            <td>${price.id}</td>
+            <td>${price.parking_id}</td>
+            <td>${typeToText(price.space_type)}</td>
+            <td>${price.start_date}</td>
+            <td>${price.end_date}</td>
+            <td>${price.start_time}</td>
+            <td>${price.end_time}</td>
+            <td>${price.week_day}</td>
+            <td>${price.price_per_hour} €</td>
+            <td class="action-buttons">
+                <button onclick="openEditModal('${btoa(JSON.stringify(price))}')">Modifier</button>
+                <button onclick="deletePricing(${price.id})">Supprimer</button>
+            </td>
+        `;
             tbody.appendChild(row);
         });
     }
 
-    function typeToText(type) {
-        return ['Standard', 'Handicapé', 'Moto', 'Vélo'][type] ?? 'Inconnu';
-    }
-
-    function openEditModal(rawData) {
-        const price = JSON.parse(decodeURIComponent(rawData));
+    function openEditModal(encodedData) {
+        const price = JSON.parse(atob(encodedData));
         document.getElementById('edit_id').value = price.id;
         document.getElementById('edit_price_per_hour').value = price.price_per_hour;
         document.getElementById('edit_start_date').value = price.start_date;
@@ -200,11 +201,16 @@ requireAuth(0);
         document.getElementById('edit_week_day').value = price.week_day;
         document.getElementById('edit_priority').value = price.priority;
 
-        document.getElementById('editModal').style.display = 'block';
+        document.getElementById('editModal').style.display = 'flex';
+        document.body.classList.add('modal-open');
+        document.body.style.position = 'fixed';
+        document.body.style.width = '100%';
     }
-
     function closeEditModal() {
         document.getElementById('editModal').style.display = 'none';
+        document.body.classList.remove('modal-open');
+        document.body.style.position = '';
+        document.body.style.width = '';
     }
 
     document.getElementById('editPricingForm').addEventListener('submit', async (e) => {

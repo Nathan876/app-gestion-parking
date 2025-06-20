@@ -30,7 +30,6 @@
     </section>
 </main>
 </body>
-
 <script type="module">
     import { login } from '../public/js/login.js';
 
