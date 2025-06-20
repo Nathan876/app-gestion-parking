@@ -134,7 +134,7 @@ class Reservation extends Controller {
     }
 
     public function updateStatus($reservationId, $status) {
-        $stmt = $this->pdo->prepare("UPDATE reservations SET status = ? WHERE id = ?");
+        $stmt = $this->pdo->prepare("UPDATE reservations SET status = :status xWHERE id = :reservationId");
         $this->notification->send_notification("user_" . $_SESSION['user']['id'], "Votre réservation" . $reservationId . " a été mise à jour avec le statut : " . $status);
         return $stmt->execute([$status, $reservationId]);
     }
@@ -181,23 +181,27 @@ class Reservation extends Controller {
 
         $id = $body['id'];
 
-        $required = ['arrival_date', 'arrival_time', 'departure_date', 'departure_time', 'status'];
-        foreach ($required as $field) {
-            if (empty($body[$field])) {
-                http_response_code(400);
-                echo json_encode(['error' => "Champ requis manquant : $field"]);
-                return;
+        if (!empty($body['status'])) {
+            $success = $this->updateStatus((int) $id, $body['status']);
+        } else {
+            $required = ['arrival_date', 'arrival_time', 'departure_date', 'departure_time', 'status'];
+            foreach ($required as $field) {
+                if (empty($body[$field])) {
+                    http_response_code(400);
+                    echo json_encode(['error' => "Champ requis manquant : $field"]);
+                    return;
+                }
             }
-        }
 
-        $model = new \App\Models\ReservationModel();
-        $success = $model->update($id, [
-            'arrival_date' => $body['arrival_date'],
-            'arrival_time' => $body['arrival_time'],
-            'departure_date' => $body['departure_date'],
-            'departure_time' => $body['departure_time'],
-            'status' => $body['status']
-        ]);
+            $model = new \App\Models\ReservationModel();
+            $success = $model->update($id, [
+                'arrival_date' => $body['arrival_date'],
+                'arrival_time' => $body['arrival_time'],
+                'departure_date' => $body['departure_date'],
+                'departure_time' => $body['departure_time'],
+                'status' => $body['status']
+            ]);
+        }
 
         if ($success) {
             $reservation = $model->getReservationDetails($id);

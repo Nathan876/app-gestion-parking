@@ -69,7 +69,7 @@
 
             bookingHistory.innerHTML = reservations.map(res => {
                 const status = getStatus(res);
-                const canCancel = status === 'En cours' && res.status === 'confirmed';
+                const canCancel = (status === 'En cours');
                 return `
                     <tr>
                         <td>${res.parking_name}</td>
@@ -105,13 +105,15 @@
         if (!confirm('Êtes-vous sûr de vouloir annuler cette réservation ?')) return;
 
         try {
-            const response = await fetch(`https://api.trouvetaplace.local/reservations/${id}/cancel`, {
-                method: 'POST',
+            const response = await fetch(`https://api.trouvetaplace.local/reservation`, {
+                method: 'PUT',
                 credentials: 'include',
                 headers: {
                     'Accept': 'application/json',
+                    'Content-Type': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest'
-                }
+                },
+                body: JSON.stringify({ id: id, status: 'cancelled' })
             });
 
             if (!response.ok) throw new Error('Erreur lors de l\'annulation');

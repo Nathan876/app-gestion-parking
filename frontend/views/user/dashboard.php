@@ -17,22 +17,11 @@
       <div id="upcoming_reservations">
         <h4>Réservations à venir</h4>
         <ul>
-          <li>
-            <strong>Place :</strong> A12
-            <strong>Date :</strong> 10 octobre 2025
-            <strong>Heure :</strong> 14:00 - 16:00
-            <button onclick="cancelReservation('ID')">Annuler</button>
-          </li>
         </ul>
       </div>
       <div id="past_reservations">
         <h4>Réservations passées</h4>
         <ul>
-          <li>
-            <strong>Place :</strong> B05
-            <strong>Date :</strong> 5 octobre 2025
-            <strong>Heure :</strong> 09:00 - 11:00
-          </li>
         </ul>
       </div>
     </div>
