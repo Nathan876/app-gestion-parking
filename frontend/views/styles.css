@@ -158,16 +158,58 @@ footer {
     margin-bottom: 10px;
 }
 
+.navbar-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 10px;
+}
+
+.hamburger,
+.hamburger::before,
+.hamburger::after {
+    content: '';
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 5px 0;
+    transition: 0.3s;
+}
+
+.site-logo {
+    height: 40px;
+    width: auto;
+}
+
+
 @media (max-width: 768px) {
-    .navbar {
-        flex-direction: column;
-        align-items: flex-start;
+    .navbar-toggle {
+        display: flex;
     }
 
     .navbar-links {
+        display: none;
         flex-direction: column;
         width: 100%;
-        gap: 5px;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        background-color: #2196F3;
+    }
+
+    .navbar-links.show {
+        display: flex;
+    }
+
+    .navbar-logo {
+        position: static;
+        transform: none;
+        text-align: center;
+        width: 100%;
     }
 
     main {
@@ -200,8 +242,6 @@ footer {
     button {
         font-size: 1em;
     }
-
-
 
     .modal {
         display: none;
@@ -265,13 +305,10 @@ footer {
 }
 
 @media (max-width: 480px) {
-    .navbar-logo {
-        font-size: 1.2em;
-    }
-
-    .navbar a {
-        padding: 8px 10px;
-        font-size: 0.95em;
+    .site-logo {
+        max-width: 791px;
+        width: 100%;
+        height: auto;
     }
 
     input, select, button {
