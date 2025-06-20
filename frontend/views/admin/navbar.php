@@ -23,6 +23,7 @@
         <a href="pricing.php">Tarifs</a>
         <a href="reports.php">Résultats</a>
         <a href="users.php">Utilisateurs</a>
+        <a href="settings.php">Réglages</a>
         <a onclick="handleLogout()">Déconnexion</a>
     </div>
 </nav>
